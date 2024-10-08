@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order</title>
+    <link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Order</h1>
+        <form method="post" action="./Order">
+            <label>
+                NAME: <input type="text" name="id" required/>
+            </label>
+            <br/>
+            <label>
+                PASSWORD: <input type="password" name="pwd" required/>
+            </label>
+            <br/>
+            <label>
+                TITLE: <input type="text" name="title" required/>
+            </label>
+            <br/>
+            <label>
+                NO. OF BOOKS: <input type="text" name="no" required/>
+            </label>
+            <br/>
+            <label>
+                DATE: <input type="text" name="date" required/>
+            </label>
+            <br/>
+            <label>
+                CREDIT CARD NUMBER: <input type="password" name="cno" required/>
+            </label>
+            <br/>
+            <div class="buttons">
+                <input type="submit" value="OK" name="button1"/>
+                <input type="reset" value="CLEAR" name="button2"/>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

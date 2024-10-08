@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Admin Dashboard</h1>
+        <form name="addBookForm" method="post" action="./Admin">
+            <input type="hidden" name="action" value="addBook"/>
+            <h3>Add a Book</h3>
+            <label>
+                TITLE: <input type="text" name="title" required/>
+            </label>
+            <br/>
+            <label>
+                AUTHOR: <input type="text" name="author" required/>
+            </label>
+            <br/>
+            <label>
+                VERSION: <input type="text" name="version" required/>
+            </label>
+            <br/>
+            <label>
+                PUBLISHER: <input type="text" name="publisher" required/>
+            </label>
+            <br/>
+            <label>
+                COST: <input type="number" name="cost" required/>
+            </label>
+            <br/>
+            <input type="submit" value="Add Book"/>
+        </form>
+        <br/>
+        <form name="viewPurchasesForm" method="post" action="./Admin">
+            <input type="hidden" name="action" value="viewPurchases"/>
+            <h3>View Purchases</h3>
+            <input type="submit" value="View Purchases"/>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration</title>
+    <link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Registration</h1>
+        <form name="myform" method="post" action="./Reg">
+            <label>
+                NAME: <input type="text" name="name" required/>
+            </label>
+            <br/>
+            <label>
+                ADDRESS: <input type="text" name="addr" required/>
+            </label>
+            <br/>
+            <label>
+                CONTACT NUMBER: <input type="number" name="phno" required/>
+            </label>
+            <br/>
+            <label>
+                LOGIN ID: <input type="text" name="id" required/>
+            </label>
+            <br/>
+            <label>
+                PASSWORD: <input type="password" name="pwd" required/>
+            </label>
+            <br/>
+            <div class="buttons">
+                <input type="submit" value="OK" onclick="validate()"/>
+                <input type="reset" value="CLEAR"/>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
