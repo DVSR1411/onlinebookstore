@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Online Bookstore</title>
+    <link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+    <div class="container">
+        <form name="myform" method="post" action="./Admin">
+            <h1>Admin Login</h1>
+            <input type="hidden" name="action" value="login"/>
+            <label>
+                USERNAME: <input type="text" name="id" required/>
+            </label>
+            <br/>
+            <label>
+                PASSWORD: <input type="password" name="pwd" required/>
+            </label>
+            <br/>
+            <input type="submit" value="OK"/>
+            <input type="reset" value="CLEAR"/>
+        </form>
+    </div>
+</body>
+</html>
