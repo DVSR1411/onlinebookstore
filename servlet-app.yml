@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: servlet-app
+spec:
+  replicas: 5 
+  selector:
+    matchLabels:
+      app: servlet-app
+  template:
+    metadata:
+      labels:
+        app: servlet-app
+    spec:
+      containers:
+      - name: frontend
+        image: dvsr1411/onlinebookstore:v1
+        ports:
+        - containerPort: 8080
+        env:
+        - name: MYSQL_HOST
+          value: "mysqldb"
+        - name: MYSQL_PORT
+          value: "3306"
+        - name: MYSQL_DATABASE
+          value: "mydb"
+        - name: MYSQL_USER
+          value: "demo"
+        - name: MYSQL_PASSWORD
+          value: "Sathwik123"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: servlet-app
+spec:
+  type: NodePort
+  ports:
+  - port: 8080
+    targetPort: 8080
+    nodePort: 30080 
+  selector:
+    app: servlet-app
