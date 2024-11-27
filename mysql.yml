@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+spec:
+  selector:
+    matchLabels:
+      app: mysql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+      - image: mysql:8.0.39
+        name: mysql
+        env:
+        - name: MYSQL_DATABASE
+          value: "mydb"
+        - name: MYSQL_USER
+          value: "demo"
+        - name: MYSQL_PASSWORD
+          value: "Sathwik123"
+        - name: MYSQL_ROOT_PASSWORD
+          value: "Sathwik123"
+        ports:
+        - containerPort: 3306
+          name: mysql
+        volumeMounts:
+        - name: init-sql
+          mountPath: /docker-entrypoint-initdb.d
+      volumes:
+      - name: init-sql
+        configMap:
+          name: init-sql-configmap
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: init-sql-configmap
+data:
+  init.sql: |
+    CREATE TABLE IF NOT EXISTS login (
+        name VARCHAR(20),
+        addr VARCHAR(20),
+        phno VARCHAR(10),
+        id VARCHAR(20) PRIMARY KEY,
+        pwd VARCHAR(20)
+    );
+    CREATE TABLE IF NOT EXISTS books (
+        title VARCHAR(20),
+        author VARCHAR(20),
+        version VARCHAR(20),
+        publisher VARCHAR(20),
+        cost INT(10)
+    );
+    CREATE TABLE IF NOT EXISTS details (
+        id VARCHAR(20),
+        title VARCHAR(20),
+        amount INT(10),
+        cno VARCHAR(12)
+    );
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysqldb
+spec:
+  ports:
+  - port: 3306
+    targetPort: 3306
+  selector:
+    app: mysql
+  clusterIP: None

@@ -1,0 +1,41 @@
+version: "3.3"
+services:
+  servlet-app:
+    container_name: frontend
+    image: dvsr1411/onlinebookstore:v1
+    build:
+      context: .
+    restart: always
+    depends_on:
+      - mysqldb
+    ports:
+      - 8080:8080
+    environment:
+      MYSQL_HOST: mysqldb 
+      MYSQL_PORT: 3306
+      MYSQL_DATABASE: mydb
+      MYSQL_USER: demo
+      MYSQL_PASSWORD: Sathwik123
+    networks:
+      app-network:
+        aliases:
+          - mysqldb
+  mysqldb:
+    container_name: backend
+    image: mysql:8.0.39
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_PORT: 3306
+      MYSQL_DATABASE: mydb
+      MYSQL_ROOT_PASSWORD: Sathwik123
+      MYSQL_USER: demo
+      MYSQL_PASSWORD: Sathwik123
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - app-network
+networks:
+  app-network:
+    name: app-network
+    driver: bridge
