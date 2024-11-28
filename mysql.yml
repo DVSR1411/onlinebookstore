@@ -14,7 +14,7 @@ spec:
         app: mysql
     spec:
       containers:
-      - image: mysql:8.0.39
+      - image: mysql:8.0.40
         name: mysql
         env:
         - name: MYSQL_DATABASE
