@@ -22,7 +22,7 @@ services:
           - mysqldb
   mysqldb:
     container_name: backend
-    image: mysql:8.0.39
+    image: mysql:8.0.40
     ports:
       - 3306:3306
     environment:
