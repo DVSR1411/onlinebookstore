@@ -1,4 +1,4 @@
-FROM tomcat:9.0.96-jdk8-corretto
+FROM tomcat:9.0.97-jdk8-corretto
 
 # Remove any existing ROOT folder in the Tomcat webapps directory (to avoid conflicts)
 RUN rm -rf /usr/local/tomcat/webapps/ROOT
