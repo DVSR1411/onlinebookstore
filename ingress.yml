@@ -3,13 +3,13 @@ kind: Ingress
 metadata:
   name: onlinebookstore-ingress
   annotations:
-    kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
-    alb.ingress.kubernetes.io/certificate-arn: <cert-id>
+    alb.ingress.kubernetes.io/certificate-arn: <cert-arn>
 spec:
+  ingressClassName: alb
   rules:
-    - host: <domain-name>
+    - host: <domain>
       http:
         paths:
           - path: /
