@@ -24,15 +24,16 @@ pipeline {
         }
         stage('Docker Build') {
             steps {
-                sh "sudo docker build -t dvsr1411/onlinebookstore:v$env.BUILD_NUMBER ."
-            }
-        }
-        stage('Docker Push') {
-            steps {
                 withCredentials([string(credentialsId: 'docker', variable: 'demo')]) {
                     sh "docker login -u dvsr1411 -p $demo"
+                    sh "docker build -t dvsr1411/onlinebookstore:v$env.BUILD_NUMBER ."
                     sh "docker push dvsr1411/onlinebookstore:v$env.BUILD_NUMBER" 
                 }
+            }
+        }
+        stage('Update manifest') {
+            steps {
+                build job: 'updatemanifest', parameters: [string(name: 'dockertag', value: "v$env.BUILD_NUMBER")]
             }
         }
     }
