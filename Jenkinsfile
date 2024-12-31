@@ -1,69 +1,53 @@
 pipeline {
     agent any
     tools {
-        jdk "JAVA_HOME"
-        maven "M2_HOME"
-        dockerTool "docker"
-        git "Default"
+        jdk 'JDK'
+        maven 'Maven'
+        git 'Git'
+        dockerTool 'docker'
+    }          
+    environment {
+        DOCKER_REGISTRY = 'your-registry'
+        DOCKER_IMAGE = 'your-image'
+        DOCKER_TAG = 'latest'
     }
     stages {
-        stage('Git Clone') {
+        stage('Clone Repository') {
             steps {
-                git 'https://github.com/DVSR1411/onlinebookstore.git'
+                cleanWs()
+                git branch: 'master', url: 'https://github.com/dvsr1411/onlinebookstore.git'
             }
         }
-        stage('Maven Build') {
+        stage('Build with Maven') {
             steps {
-                sh "mvn clean install package"
+                sh 'mvn clean install package'
             }
         }
-        stage('Nexus Artifact Upload') {
-            steps{
-                nexusArtifactUploader artifacts: [[artifactId: 'onlinebookstore', classifier: '', file: 'target/onlinebookstore.war', type: 'war']], credentialsId: 'demo', groupId: 'onlinebookstore', nexusUrl: '43.204.22.62:8081', nexusVersion: 'nexus3', protocol: 'http', repository: 'onlinebookstore', version: '0.0.1-SNAPSHOT'
+        stage('Push to Nexus') {
+            steps {
+                nexusArtifactUploader artifacts: [[artifactId: 'onlinebookstore', classifier: '', file: 'target/onlinebookstore.war', type: 'war']], credentialsId: 'demo', groupId: 'onlinebookstore', nexusUrl: 'NEXUS_URL', nexusVersion: 'nexus3', protocol: 'http', repository: 'onlinebookstore', version: '0.0.1-SNAPSHOT'
             }
         }
-        stage('Docker Build') {
+        stage('Build Docker Image') {
             steps {
-                withCredentials([string(credentialsId: 'docker', variable: 'demo')]) {
-                    sh "docker login -u dvsr1411 -p $demo"
-                    sh "docker build -t dvsr1411/onlinebookstore:v$env.BUILD_NUMBER ."
-                    sh "docker push dvsr1411/onlinebookstore:v$env.BUILD_NUMBER" 
+                script {
+                    docker.build("${DOCKER_REGISTRY}/${DOCKER_IMAGE}:${DOCKER_TAG}")
                 }
             }
         }
-        stage('Update manifest') {
+        stage('Push Docker Image') {
             steps {
-                build job: 'updatemanifest', parameters: [string(name: 'dockertag', value: "v$env.BUILD_NUMBER")]
+                script {
+                    docker.withRegistry('https://${DOCKER_REGISTRY}', 'docker-credentials-id') {
+                        docker.image("${DOCKER_REGISTRY}/${DOCKER_IMAGE}:${DOCKER_TAG}").push()
+                    }
+                }
             }
         }
     }
     post {
         always {
-            script {
-                try {
-                    emailext (
-                        subject: "Build ${currentBuild.currentResult}: ${env.JOB_NAME} #${env.BUILD_ID}",
-                        body: """
-                            <html>
-                            <body>
-                            <p>Build was ${currentBuild.currentResult}!</p>
-                            <p><b>Build ID:</b> ${env.BUILD_ID}</p>
-                            <p><b>Job Name:</b> ${env.JOB_NAME}</p>
-                            <p><b>Jenkins Home:</b> ${env.JENKINS_HOME}</p>
-                            <p>Check the <a href="${env.BUILD_URL}">Console Output</a></p>
-                            </body>
-                            </html>
-                        """,
-                        to: 'd.v.sathwikreddy@gmail.com',
-                        from: 'd.v.sathwikreddy1411@gmail.com',
-                        mimeType: 'text/html'
-                    )
-                    echo "Email sent successfully!"
-                } 
-                catch (Exception e) {
-                    echo "Failed to send email: ${e.message}"
-                }
-            }
+            cleanWs()
         }
     }
 }
